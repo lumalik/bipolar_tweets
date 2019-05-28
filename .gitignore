@@ -1,0 +1,17 @@
+*.json
+
+*.npy
+
+/data/
+
+/data/processed/
+
+/data/raw/
+
+/models/
+
+/ressources/
+
+/stuff/
+
+*.pkl
