@@ -10,11 +10,6 @@ def extract_jsons(path,is_control_int):
     os.chdir('/Users/lukasmalik/Desktop/Praktikum CSH/project-internship/')
     timelines = glob.glob(os.path.join(path, "*.json"))
     dataframe = pd.DataFrame()
-#    texts = []
-#    ids = []
-#    tags = []
-#    lang = []
-#    date = []
     
     for i in tqdm(range(0,len(timelines))):
         data = pd.read_json(timelines[i], lines=True)
@@ -33,20 +28,6 @@ def extract_jsons(path,is_control_int):
             data = data[['id','is_control','created_at','full_text']]
             dataframe = dataframe.append(data, ignore_index=True)
             
-#            ids.append(np.repeat(user_id, len(data)))
-#            tags.append(np.repeat(is_control_int, len(data)))
-#            date.append(data['created_at'])
-#            texts.append(data['full_text'])
-#            lang.append(data['lang'])
-        #print(str(len(timelines) - i) + ' to go ...')
-        
-        
-    # save the data in dataframe
-#    dataframe = pd.DataFrame({'id':np.hstack(ids),
-#                              'text':np.hstack(texts), 
-#                              'userlang':np.hstack(lang), 
-#                              'date':np.hstack(date), 
-#                              'is_control_group':np.hstack(tags)})
     if is_control_int == 1: 
         dataframe.to_pickle("./data/processed/control_data1.pkl")
     else:

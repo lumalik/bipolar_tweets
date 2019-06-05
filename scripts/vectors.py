@@ -67,8 +67,7 @@ del df
 doc_vecs = np.load('../data/processed/vectors.npy')
 
 df['vecs'] = doc_vecs
-# ===========================================================================
-#test 
 
-pd.read_pickle("../data/processed/df_vectors.pkl", compression="gzip")
-
+from nltk.tokenize import TweetTokenizer
+tokenizer = TweetTokenizer()
+words = tokenizer.tokenize(tweet)
