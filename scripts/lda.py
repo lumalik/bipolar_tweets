@@ -1,5 +1,5 @@
 # topic modeling on tweet datasets
-
+from scripts.load_data import *
 df = load_data()
 
 # ===========================================================================
@@ -44,8 +44,9 @@ def prepare_text_for_lda(tweets):
 # ===========================================================================
 def create_corpora_dict(texts): 
     text_data = prepare_text_for_lda(texts)
-    dictionary = corpora.Dictionary(text_data, prune_at=num_features)
-    dictionary.filter_extremes(no_below=10,no_above=0.5, keep_n=num_features)
+    num_features = 100000 #read somewhere 
+    dictionary = corpora.Dictionary(text_data) #, prune_at = num_features
+    dictionary.filter_extremes(no_below=100,no_above=0.5, keep_n=num_features)
     dictionary.compactify()
     corpus = [dictionary.doc2bow(text) for text in text_data]
     return dictionary,corpus 
@@ -56,14 +57,11 @@ def create_corpora_dict(texts):
 pickle.dump(corpus, open('../data/processed/corpus.pkl', 'wb'))
 dictionary.save('../data/processed/dictionary.gensim')
 
-
-
 # create and save corpora for bipolar 
 (dictionary,corpus) = create_corpora_dict(df.full_text[df.is_control == 0])
 
 pickle.dump(corpus, open('../data/processed/corpus_bipolar.pkl', 'wb'))
 dictionary.save('../data/processed/dictionary_bipolar.gensim')
-
 
 # create and save corpora for control 
 (dictionary,corpus) = create_corpora_dict(df.full_text[df.is_control == 1])
@@ -78,16 +76,17 @@ dictionary.save('../data/processed/dictionary_control.gensim')
 import gensim
 NUM_TOPICS = 10
 
-dictionary = gensim.corpora.Dictionary.load('dictionary.gensim')
+dictionary = gensim.corpora.Dictionary.load('../data/processed/dictionary.gensim')
 corpus = pickle.load(open('../data/processed/corpus.pkl', 'rb'))
-
-print(8 * (1453750) * NUM_TOPICS * 3)
 
 ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics = NUM_TOPICS, id2word=dictionary, passes=1)
 ldamodel.save('../models/lda.gensim')
-topics = ldamodel.print_topics(num_words=4)
+topics = ldamodel.print_topics(num_words=10)
 for topic in topics:
+    print("")
     print(topic)
+    print("")
+    print("_______________________________________________")
  
 # =========================================================================== 
 # visualizing 
